@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+
+  state = {
+    length : 0
+  }
+
+  countCharactersString = (event) => {
+    const length = event.target.value.length;
+    this.setState({length : length});
+  }
+
   render() {
     return (
       <div className="App">
@@ -15,7 +25,8 @@ class App extends Component {
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
 
-        <input type="text" />
+        <input type="text" onChange={this.countCharactersString}/>
+        <p>{this.state.length}</p>
       </div>
     );
   }
