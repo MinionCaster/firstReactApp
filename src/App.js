@@ -1,19 +1,50 @@
 import React, { Component } from 'react';
 import './App.css';
 import ValidationComponent from './ValidationComponent/ValidationComponent';
+import CharComponent from './CharComponent/CharComponent';
 
 class App extends Component {
 
   state = {
-    length : 0
+    length : 0,
+    text: '',
+    charTable: []
+  }
+  
+
+  countCharactersString = event => {
+    var charTable;
+    if(this.state.charTable.length === 0 ) {
+      charTable = [];
+    } else {
+      charTable = this.state.charTable.map(el => el);
+    }
+    
+    const length = event.target.value.length;
+    const text = event.target.value;
+    const char = text[length-1];
+    charTable.push(char);
+    this.setState({length : length, text: text, charTable: charTable} );
   }
 
-  countCharactersString = (event) => {
-    const length = event.target.value.length;
-    this.setState({length : length});
+  deleteCharHandler = charIndex => {
+    const chars = [...this.state.charTable];
+    chars.splice(charIndex, 1);
+    this.setState({charTable: chars});
   }
+
 
   render() {
+    let chars = null;
+    chars = (
+      this.state.charTable.map((el, index) => {
+        return <CharComponent
+          key={index} 
+          char={el} 
+          click={() => this.deleteCharHandler(index)}
+        />
+      })
+    )
     return (
       <div className="App">
         <ol>
@@ -28,6 +59,7 @@ class App extends Component {
 
         <input type="text" onChange={this.countCharactersString}/>
         <ValidationComponent length={this.state.length}/>
+        {chars}
       </div>
     );
   }
